@@ -7,23 +7,29 @@
   <body>
     <form method="post" action="/">
       <p>
-        <label for="name">Name</label>
-        <input type="text" id="name" name="name" />
-      </p>
-      <p>
-        <label for="description">Description</label>
-        <input type="text" id="description" name="description" />
+        <label for="title">Title</label>
+        <input type="text" id="title" name="title" value="<%= @event.title %>" />
       </p>
       <p>
         <label for="start_at">Start</label>
-        <input type="text" id="start_at" name="start_at" />
+        <input type="text" id="start_at" name="start_at" value="<%= @event.start_at %>" />
       </p>
       <p>
         <label for="end_at">End</label>
-        <input type="text" id="end_at" name="end_at" />
+        <input type="text" id="end_at" name="end_at" value="<%= @event.end_at %>" />
       </p>
       <input type="hidden" name="id" value="<%= @event.calendar_event_id %>">
       <input type="submit" value="Submit" />
     </form>
+    
+<% if @events %>
+<%  for event in @events %>
+    <p>
+      <a href="/event?id=<%= event.id.strip %>">
+        <%= event.title %> 
+      </a>
+    </p>  
+<%  end %>
+<% end %>
   </body>
 </html>    
