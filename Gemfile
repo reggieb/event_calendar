@@ -1,4 +1,4 @@
 source :rubygems
 
-#gem 'foreman'
 gem 'sinatra'
+gem 'google_calendar'
