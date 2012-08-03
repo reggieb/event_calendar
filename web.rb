@@ -11,6 +11,7 @@ module EventCalendar
     @event = Event.new
     @events = @event.calendar.events
     @events = [@events] unless @events.kind_of? Array
+    @events.compact!
     erb :event
   end
 
@@ -19,11 +20,13 @@ module EventCalendar
     @event.save
     @events = @event.calendar.events
     @events = [@events] unless @events.kind_of? Array
+    @events.compact!
     erb :event
   end
   
   get '/event' do
     @event = Event.find(params[:id])
+    @action = 'event'
     erb :event
   end
   
@@ -33,6 +36,18 @@ module EventCalendar
     @event.save
     @events = @event.calendar.events
     @events = [@events] unless @events.kind_of? Array
+    @events.compact!
+    @action = 'event'
+    erb :event
+  end
+  
+  post '/event/delete' do
+    event = Event.find(params[:id])
+    event.delete
+    @event = Event.new
+    @events = @event.calendar.events
+    @events = [@events] unless @events.kind_of? Array
+    @events.compact!
     erb :event
   end
  

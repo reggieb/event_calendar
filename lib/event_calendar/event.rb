@@ -32,12 +32,19 @@ module EventCalendar
     end
     
     def save
-      @calendar_event = calendar.create_event do |e|
-        e.title = @title
-        e.start_time = @start_at
-        e.end_time = @end_at
+      if @calendar_event
+        @calendar_event.title = @title
+        @calendar_event.start_time = @start_at
+        @calendar_event.end_time = @end_at
+        calendar.save_event(@calendar_event)
+      else
+        @calendar_event = calendar.create_event do |e|
+          e.title = @title
+          e.start_time = @start_at
+          e.end_time = @end_at
+        end
+        @calendar_event_id = @calendar_event.id
       end
-      @calendar_event_id = @calendar_event.id
     end
     
     def delete

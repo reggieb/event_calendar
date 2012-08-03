@@ -2,10 +2,11 @@
 <html>
   <head>
     <title>Event</title>
+    <link rel="stylesheet" type="text/css" href="/css/events.css"  />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   </head>
   <body>
-    <form method="post" action="/">
+    <form method="post" action="/<%= @action %>">
       <p>
         <label for="title">Title</label>
         <input type="text" id="title" name="title" value="<%= @event.title %>" />
@@ -22,13 +23,17 @@
       <input type="submit" value="Submit" />
     </form>
     
-<% if @events %>
+<% if @events && !@events.empty? %>
 <%  for event in @events %>
-    <p>
+    <div class="events">
       <a href="/event?id=<%= event.id.strip %>">
         <%= event.title %> 
       </a>
-    </p>  
+      <form method="post" action="/event/delete">
+        <input type="hidden" name="id" value="<%= event.id.strip %>">
+        <input type="submit" value="Delete" />
+      </form>
+    </div>  
 <%  end %>
 <% end %>
   </body>
