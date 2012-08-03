@@ -1,6 +1,28 @@
-<%#
-# To change this template, choose Tools | Templates
-# and open the template in the editor.
-%>
-
-<%= "event" %>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Event</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  </head>
+  <body>
+    <form method="post" action="/">
+      <p>
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" />
+      </p>
+      <p>
+        <label for="description">Description</label>
+        <input type="text" id="description" name="description" />
+      </p>
+      <p>
+        <label for="start_at">Start</label>
+        <input type="text" id="start_at" name="start_at" />
+      </p>
+      <p>
+        <label for="end_at">End</label>
+        <input type="text" id="end_at" name="end_at" />
+      </p>
+      <input type="submit" value="Submit" />
+    </form>
+  </body>
+</html>    
