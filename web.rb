@@ -28,8 +28,7 @@ module EventCalendar
   post '/' do
     @event = Event.new(params)
     @event.save
-    get_events
-    erb :event
+    redirect to('/')
   end
   
   get '/event' do
@@ -40,17 +39,13 @@ module EventCalendar
   post '/event' do
     @event.load(params)
     @event.save
-    get_events
-    @action = 'event'
-    erb :event
+    redirect to('/')
   end
   
   post '/event/delete' do
     event = Event.find(params[:id])
     event.delete
-    @event = Event.new
-    get_events
-    erb :event
+    redirect to('/')
   end
  
 end
