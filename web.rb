@@ -6,21 +6,25 @@ require 'erb'
 require_relative 'lib/event_calendar'
 
 module EventCalendar
-
+  
+  helpers do
+    def get_events
+      @events = @event.calendar.events
+      @events = [@events] unless @events.kind_of? Array
+      @events.compact!
+    end
+  end
+  
   get '/' do
     @event = Event.new
-    @events = @event.calendar.events
-    @events = [@events] unless @events.kind_of? Array
-    @events.compact!
+    get_events
     erb :event
   end
 
   post '/' do
     @event = Event.new(params)
     @event.save
-    @events = @event.calendar.events
-    @events = [@events] unless @events.kind_of? Array
-    @events.compact!
+    get_events
     erb :event
   end
   
@@ -34,9 +38,7 @@ module EventCalendar
     @event = Event.find(params[:id])
     @event.load(params)
     @event.save
-    @events = @event.calendar.events
-    @events = [@events] unless @events.kind_of? Array
-    @events.compact!
+    get_events
     @action = 'event'
     erb :event
   end
@@ -44,10 +46,8 @@ module EventCalendar
   post '/event/delete' do
     event = Event.find(params[:id])
     event.delete
+    get_events
     @event = Event.new
-    @events = @event.calendar.events
-    @events = [@events] unless @events.kind_of? Array
-    @events.compact!
     erb :event
   end
  
