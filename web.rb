@@ -15,6 +15,10 @@ module EventCalendar
     end
   end
   
+  before '/event' do
+    @event = Event.find(params[:id])
+  end
+  
   get '/' do
     @event = Event.new
     get_events
@@ -29,13 +33,11 @@ module EventCalendar
   end
   
   get '/event' do
-    @event = Event.find(params[:id])
     @action = 'event'
     erb :event
   end
   
   post '/event' do
-    @event = Event.find(params[:id])
     @event.load(params)
     @event.save
     get_events
@@ -46,8 +48,8 @@ module EventCalendar
   post '/event/delete' do
     event = Event.find(params[:id])
     event.delete
-    get_events
     @event = Event.new
+    get_events
     erb :event
   end
  
