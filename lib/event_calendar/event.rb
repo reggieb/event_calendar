@@ -14,7 +14,7 @@ module EventCalendar
         :test => args[:test],
         :calendar_event_id => id
       )
-      event.load_from_calendar
+      event.send(:load_from_calendar) # sending as load_from_calendar is private
       return event
     end
 
@@ -46,6 +46,7 @@ module EventCalendar
       end
     end
     
+    private
     def load_from_calendar
       if calendar_event_id
         @calendar_event = calendar.find_or_create_event_by_id(calendar_event_id)
@@ -53,7 +54,6 @@ module EventCalendar
       end
     end
     
-    private
     def load_attributes(source, target = self)
       ATTRIBUTES.each do |attr|
         if source.kind_of? Hash
