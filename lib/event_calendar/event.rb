@@ -50,7 +50,7 @@ module EventCalendar
     def load_from_calendar
       if calendar_event_id
         @calendar_event = calendar.find_or_create_event_by_id(calendar_event_id)
-        load_attributes(calendar_event)
+        load_attributes(@calendar_event)
       end
     end
     
