@@ -2,8 +2,11 @@ require_relative 'calendar'
 
 module EventCalendar
   class Event
+    
+    ATTRIBUTES = %w{title start_time end_time where content}
 
-    attr_accessor :title, :description, :start_at, :end_at, :where, :content, :calendar_event_id
+    attr_accessor *ATTRIBUTES
+    attr_accessor :calendar_event_id
     attr_reader :calendar_event
     
     def self.find(id, args = {})
@@ -24,34 +27,17 @@ module EventCalendar
     end
     
     def load(args)
-      @title = args[:title]
-      @start_at = args[:start_at]
-      @end_at = args[:end_at]
-      @content = args[:content]
-      @where = args[:where]
+      load_attributes(args)
       @test = args[:test]
       @calendar_event_id = args[:calendar_event_id]
     end
     
     def save
-      if @calendar_event
-        @calendar_event.title = @title
-        @calendar_event.start_time = @start_at
-        @calendar_event.end_time = @end_at
-        @calendar_event.content = @content
-        @calendar_event.where = @where
-        calendar.save_event(@calendar_event)
+      if calendar_event
+        save_existing
       else
-        @calendar_event = calendar.create_event do |e|
-          e.title = @title
-          e.start_time = @start_at
-          e.end_time = @end_at
-          e.content = @content
-          e.where = @where
-        end
-        @calendar_event_id = @calendar_event.id
+        create_new_event_in_calendar
       end
-      @calendar_event.content = "Hurrah!"
     end
     
     def delete
@@ -63,12 +49,31 @@ module EventCalendar
     def load_from_calendar
       if calendar_event_id
         @calendar_event = calendar.find_or_create_event_by_id(calendar_event_id)
-        @title = calendar_event.title
-        @start_at = calendar_event.start_time
-        @end_at = calendar_event.end_time
-        @where = calendar_event.where
-        @content = calendar_event.content
+        load_attributes(calendar_event)
       end
+    end
+    
+    private
+    def load_attributes(source, target = self)
+      ATTRIBUTES.each do |attr|
+        if source.kind_of? Hash
+           target.send("#{attr}=", source[attr.to_sym])
+        else
+          target.send("#{attr}=", source.send(attr))
+        end
+      end
+    end
+    
+    def save_existing
+      load_attributes(@calendar_event)
+      calendar.save_event(@calendar_event)
+    end
+    
+    def create_new_event_in_calendar
+      @calendar_event = calendar.create_event do |e|
+        load_attributes(self, e)
+        end
+      @calendar_event_id = @calendar_event.id
     end
     
   end

@@ -10,13 +10,13 @@ module EventCalendar
     def setup
       @title = 'A Happening'
       @description = 'Something has happened'
-      @start_at = Time.now - hours
-      @end_at = Time.now + hours
+      @start_time = Time.now - hours
+      @end_time = Time.now + hours
       @event = Event.new(
         :title => @title,
         :description => @description,
-        :start_at => @start_at,
-        :end_at => @end_at,
+        :start_time => @start_time,
+        :end_time => @end_time,
         :test => true
       )
     end
